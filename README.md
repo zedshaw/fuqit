@@ -41,6 +41,9 @@ Examples:
 And if people go to a directory without the slash then that's just tough.
 I haven't implemented dumbfuck-do-what-i-mean-redirects yet.
 
+It also can't handle binary files yet.  What a travesty.  I'll do that tomorrow
+when I'm bored again.
+
 But That's Magic!
 =================
 
