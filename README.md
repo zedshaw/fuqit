@@ -44,4 +44,4 @@ I haven't implemented dumbfuck-do-what-i-mean-redirects yet.
 But That's Magic!
 =================
 
-Yup. Love it.
+I will refer you to our official Mascot https://github.com/zedshaw/fuqit/blob/master/mascot.gif?raw=true
