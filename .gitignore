@@ -1,0 +1,6 @@
+.*.sw*
+ENV
+*.pyc
+run
+.todo/todo.txt.bak
+ssl
