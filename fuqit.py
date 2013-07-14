@@ -63,7 +63,13 @@ class FuqitHandler(BaseHTTPRequestHandler):
                 return self.render_template(base + '.html')
             elif os.path.exists('app' + base + '.py'):
                 return self.render_module(base + '.py')
-        else: 
+        else:
+            # if dir with no trailing /, redirect
+            if os.path.isdir('app' + path):
+                self.send_response(301)
+                self.send_header('Location', path + '/')
+                self.end_headers()
+                return 
             # otherwise it's a module, tack on .py and load or fail
             return self.render_module(path + '.py')
 
