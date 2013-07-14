@@ -40,7 +40,7 @@ Examples:
 * /mystuff/cool -> a module named app.mystuff.cool
 * /dir/that/exists -> redirect to /dir/that/exists/
 
-It also can't handle binary files yet.  What a travesty.  I'll do that tomorrow
+It can't handle binary files yet.  What a travesty.  I'll do that tomorrow
 when I'm bored again.
 
 But That's Magic!
