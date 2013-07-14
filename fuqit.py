@@ -46,6 +46,7 @@ class FuqitHandler(BaseHTTPRequestHandler):
         self.wfile.write(result)
 
     def knife_or_banana(self, path):
+        path = path.split('?', 1)[0]
         # THIS AIN'T THAT SECURE, BUT FUQIT
         root, ext = os.path.splitext(path)
 
