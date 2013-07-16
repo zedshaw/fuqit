@@ -30,6 +30,7 @@ care about.
 1. If it has an extension it's a template.
 2. If it ends in / it's either /index.html or /index.py
 3. Otherwise it's a module named after the path with / changed to .
+unless there is a directory with the same path, then this will produce a redirect.
 
 Examples:
 
@@ -37,11 +38,9 @@ Examples:
 * /the/stupid/place/stuff.txt -> jinja template same path
 * /the/other/place/index.html -> same thing
 * /mystuff/cool -> a module named app.mystuff.cool
+* /dir/that/exists -> redirect to /dir/that/exists/
 
-And if people go to a directory without the slash then that's just tough.
-I haven't implemented dumbfuck-do-what-i-mean-redirects yet.
-
-It also can't handle binary files yet.  What a travesty.  I'll do that tomorrow
+It can't handle binary files yet.  What a travesty.  I'll do that tomorrow
 when I'm bored again.
 
 But That's Magic!
