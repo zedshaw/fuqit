@@ -31,10 +31,19 @@ class FuqitHandler(BaseHTTPRequestHandler):
         variables.update(TOOLS)
         return variables
 
+    def reply(self, body, code=200, content_type="text/html"):
+        """Send a reply properly since the python http server has 0 clues about
+        things like headers and HTTP.
+        """
+        self.send_response(code)
+        self.send_header("Content-type", content_type)
+        self.end_headers()
+        self.wfile.write(body)
+
     def render_template(self, path):
         template = ENV.get_template(path)
         variables = self.make_vars()
-        self.wfile.write(template.render(**variables))
+        self.reply(template.render(**variables))
 
     def render_module(self, name):
         # OH MAN THE HACKING THIS CAN ALLOW!
@@ -43,7 +52,7 @@ class FuqitHandler(BaseHTTPRequestHandler):
         target = module(base)
         variables = self.make_vars()
         result = target.run(variables)
-        self.wfile.write(result)
+        self.reply(result)
 
     def knife_or_banana(self, path):
         path = path.split('?', 1)[0]
@@ -63,13 +72,13 @@ class FuqitHandler(BaseHTTPRequestHandler):
                 return self.render_template(base + '.html')
             elif os.path.exists('app' + base + '.py'):
                 return self.render_module(base + '.py')
-        else:
+        elif os.path.isdir('app' + path):
             # if dir with no trailing /, redirect
-            if os.path.isdir('app' + path):
-                self.send_response(301)
-                self.send_header('Location', path + '/')
-                self.end_headers()
-                return 
+            self.send_response(301)
+            self.send_header('Location', path + '/')
+            self.end_headers()
+            return "" 
+        else:
             # otherwise it's a module, tack on .py and load or fail
             return self.render_module(path + '.py')
 
