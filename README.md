@@ -27,6 +27,7 @@ Resolution Order
 Easy, and oh so hackable so don't run this crap on any computer you
 care about.
 
+0. If it's in /static/ it's a binary file.
 1. If it has an extension it's a template.
 2. If it ends in / it's either /index.html or /index.py
 3. Otherwise it's a module named after the path with / changed to .
@@ -42,6 +43,17 @@ Examples:
 
 It can't handle binary files yet.  What a travesty.  I'll do that tomorrow
 when I'm bored again.
+
+Using It
+========
+
+You can play with the example by doing this::
+
+    export PYTHONPATH=.
+    python fuqit/server.py app 127.0.0.1 8000
+
+Then go to http://127.0.0.1:8000/ and you'll get my little demo testing app.
+It's in the app directory and just has some files for testing the rendering.
 
 But That's Magic!
 =================
