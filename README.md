@@ -61,7 +61,7 @@ But That's Magic!
 
 I will refer you to our official Mascot:
 
-![Magic Is Awesome](https://github.com/zedshaw/fuqit/blob/master/mascot.gif?raw=true)
+![Magic Is Awesome](https://raw.github.com/zedshaw/fuqit/master/app/static/mascot.gif)
 
 Investor Statement
 ==================
