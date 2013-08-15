@@ -13,10 +13,11 @@ How It Works
 
 1. mkdir app
 2. touch app/__init__.py
-3. python fuqit.py app 0.0.0.0 8080
-4. Put .py files or "anything else" into app.
-5. The .py files need a run function.  It gets variables.
-6. Anything else is a jinja2 template.
+4. mkdir app/static
+4. python fuqit.py app 0.0.0.0 8080
+5. Put .py files or "anything else" into app.
+6. The .py files need a run function.  It gets variables.
+7. Anything else is a jinja2 template.
 
 That's it.  Look in this project's app/ directory to see me
 doing stupid crap with it to see if it works.
@@ -27,7 +28,7 @@ Resolution Order
 Easy, and oh so hackable so don't run this crap on any computer you
 care about.
 
-0. If it's in /static/ it's a binary file.
+0. If it's in /static/ it's a static file.
 1. If it has an extension it's a template.
 2. If it ends in / it's either /index.html or /index.py
 3. Otherwise it's a module named after the path with / changed to .
@@ -41,8 +42,8 @@ Examples:
 * /mystuff/cool -> a module named app.mystuff.cool
 * /dir/that/exists -> redirect to /dir/that/exists/
 
-It can't handle binary files yet.  What a travesty.  I'll do that tomorrow
-when I'm bored again.
+It uses the python mimetypes module to figure out mimetypes by extension. No, I don't
+know how to add new extensions to it.
 
 Using It
 ========
