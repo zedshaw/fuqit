@@ -18,6 +18,9 @@ import os
 from jinja2 import Environment, PackageLoader, TemplateNotFound
 from fuqit import tools
 
+class RequestDict(dict):
+    __getattr__ = dict.__getitem__
+
 class App(object):
 
     def __init__(self, app, default_mtype=None, static_dir=None):
@@ -46,7 +49,7 @@ class App(object):
         base, ext = os.path.splitext(name[1:])
         base = base.replace('/', '.')
         target = tools.module(base)
-        result = target.run(variables['web'])
+        result = target.run(RequestDict(variables['web']))
 
         if isinstance(result, tuple):
             return result
