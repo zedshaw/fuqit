@@ -46,7 +46,7 @@ class App(object):
         base, ext = os.path.splitext(name[1:])
         base = base.replace('/', '.')
         target = tools.module(base)
-        result = target.run(variables)
+        result = target.run(variables['web'])
 
         if isinstance(result, tuple):
             return result

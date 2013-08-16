@@ -23,8 +23,8 @@ DEFAULT_HEADERS = {
 }
 
 class FuqitHandler(BaseHTTPRequestHandler):
-    def transform_request(self):
-        path, params = tools.parse_request(self.path)
+    def transform_request(self, request_body=None):
+        path, params = tools.parse_request(self.path, request_body)
         context = tools.build_context(params, self)
         body, code, headers = app.process(self.command, path, params, context)
         self.generate_response(body, code, headers)
@@ -33,7 +33,9 @@ class FuqitHandler(BaseHTTPRequestHandler):
         self.transform_request()
 
     def do_POST(self):
-        self.transform_request()
+        clength = int(self.headers['content-length'])
+        request_body = self.rfile.read(clength)
+        self.transform_request(request_body)
 
     def generate_response(self, body, code, headers):
         headers = headers or DEFAULT_HEADERS

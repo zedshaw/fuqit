@@ -16,6 +16,7 @@
 
 from importlib import import_module
 import mimetypes
+import cgi
 
 __all__ = ['module']
 
@@ -39,13 +40,20 @@ def build_context(params, handler):
                 }
     return variables
 
-def parse_request(path):
-    # TODO: fix this lame ass shit to actually parse params and POST
+def parse_request(path, request_body):
+    request_params = {}
+
     if '?' in path:
         path, params = path.split('?', 1)
-        return path, {'params': params}
-    else:
-        return path, {}
+        params = cgi.parse_qsl(params)
+        request_params.update(params)
+
+    if request_body:
+        params = cgi.parse_qsl(request_body)
+        request_params.update(params)
+
+    return path, request_params
+
 
 def make_ctype(ext, default_mtype):
     mtype = mimetypes.types_map.get(ext, default_mtype)
