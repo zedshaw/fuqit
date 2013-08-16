@@ -10,9 +10,15 @@
             <li><a href="/files/">/files/</a>
             <li><a href="/files">/files</a>
             <li><a href="/form?this=that&those=them">/form GET params</a>
+            <li><a href="/files/test.html?this=that&those=them">/files/test.html GET params</a>
         </ol>
 
         <form action="/form" method="POST">
+            Your name: <input name="name">
+            <input type="submit">
+        </form>
+
+        <form action="/files/test.html" method="POST">
             Your name: <input name="name">
             <input type="submit">
         </form>

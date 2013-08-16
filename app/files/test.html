@@ -26,6 +26,20 @@
             {% endfor %}
         </table>
 
+        {% if web.params %}
+
+        <h1>Params</h1>
+
+        <table>
+            <tr><th>KEY</th><th>VALUE</th></tr>
+
+            {% for key, value in web.params.items() %}
+                <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+            {% endfor %}
+        </table>
+
+        {% endif %}
+
         <h1>Variables</h1>
         <table>
             <tr><th>Variable</th><th>Value</th></tr>
