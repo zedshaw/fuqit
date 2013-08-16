@@ -62,9 +62,13 @@ class App(object):
 
     def render_module(self, name, variables):
         base, ext = os.path.splitext(name[1:])
+        context = RequestDict(variables['web'])
         base = base.replace('/', '.')
         target = tools.module(base)
-        result = target.run(RequestDict(variables['web']))
+
+        func = target.__dict__.get(context.method, 
+                                  target.__dict__['run'])
+        result = func(context)
 
         if isinstance(result, tuple):
             return result
