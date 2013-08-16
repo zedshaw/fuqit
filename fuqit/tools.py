@@ -17,6 +17,8 @@
 from importlib import import_module
 import mimetypes
 
+__all__ = ['module']
+
 mimetypes.init()
 
 def module(name):
@@ -32,8 +34,9 @@ def build_context(params, handler):
                   'client_address': handler.client_address,
                   'server': handler.server,
                   'request_version': handler.request_version,
-                 }}
-    variables.update(__all__)
+                 },
+                 'module': module,
+                }
     return variables
 
 def parse_request(path):
@@ -49,4 +52,5 @@ def make_ctype(ext, default_mtype):
     return {'Content-Type': mtype}
 
 
-__all__ = {'module': module}
+
+
