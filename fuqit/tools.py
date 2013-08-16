@@ -33,7 +33,6 @@ def build_context(params, handler):
                   'path': handler.path,
                   'method': handler.command,
                   'client_address': handler.client_address,
-                  'server': handler.server,
                   'request_version': handler.request_version,
                  },
                  'module': module,
