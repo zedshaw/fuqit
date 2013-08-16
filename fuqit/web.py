@@ -18,6 +18,7 @@ import os
 from jinja2 import Environment, PackageLoader, TemplateNotFound
 from fuqit import tools
 import re
+import traceback
 
 class RequestDict(dict):
     __getattr__ = dict.__getitem__
@@ -50,9 +51,9 @@ class App(object):
             return self.knife_or_banana(path, context)
         except TemplateNotFound:
             return "", 404, {}
-        #except Exception as e:
-        #    # TODO: log the exception here
-        #    return str(e), 500, {}
+        except Exception as e:
+            traceback.print_exc()
+            return str(e), 500, {}
 
     def render_template(self, ext, path, variables):
         headers = tools.make_ctype(ext, self.default_mtype)
