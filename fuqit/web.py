@@ -31,9 +31,17 @@ class App(object):
         self.app = app
         self.static_dir = os.path.realpath(self.app_path +
                                            (static_dir or '/static/'))
+        self.errors_dir = self.app_path + '/errors/'
         self.default_mtype = default_mtype or 'text/html'
         self.env = Environment(loader=PackageLoader(self.app, '.'))
         self.allowed_referer = re.compile(allowed_referer)
+
+    def render_error(self, code, message="", variables=None):
+        try:
+            return self.render_template('.html', self.errors_dir + '%d.html' %
+                                        code, variables or {})
+        except TemplateNotFound:
+            return message, code, {}
 
     def csrf_check(self, context):
         referer = context['web']['headers'].get('referer', '')
@@ -45,15 +53,15 @@ class App(object):
 
     def process(self, method, path, params, context):
         if not self.csrf_check(context):
-            return "", 404, {}
+            return self.render_error(404, "Not Found")
 
         try:
             return self.knife_or_banana(path, context)
         except TemplateNotFound:
-            return "", 404, {}
+            return self.render_error(404, "Not Found")
         except Exception as e:
             traceback.print_exc()
-            return str(e), 500, {}
+            return self.render_error(500, str(e))
 
     def render_template(self, ext, path, variables):
         headers = tools.make_ctype(ext, self.default_mtype)
@@ -64,10 +72,17 @@ class App(object):
         base, ext = os.path.splitext(name[1:])
         context = RequestDict(variables['web'])
         base = base.replace('/', '.')
-        target = tools.module(base)
+        try:
+            target = tools.module(base)
+        except ImportError:
+            return self.render_error(404, "Not Found", variables=variables)
 
-        func = target.__dict__.get(context.method, 
-                                  target.__dict__['run'])
+        try:
+            actions = target.__dict__
+            func = actions.get(context.method, None) or actions['run']
+        except KeyError:
+            return self.render_error(500, 'No run method or %s method.' %
+                                     context.method)
         result = func(context)
 
         if isinstance(result, tuple):
@@ -86,7 +101,7 @@ class App(object):
 
         if not realpath.startswith(self.app_path):
             # prevent access outside the app dir by comparing path roots
-            return "", 404, {}
+            return self.render_error(404, "Not Found", variables=variables)
 
         elif realpath.startswith(self.static_dir):
             return self.render_static(ext, realpath)
@@ -98,7 +113,6 @@ class App(object):
         elif path.endswith('/'):
             # if it ends in /, it's a /index.html or /index.py
             base = os.path.join(path, 'index')
-            print "BASE", base
 
             #! this will be hackable if you get rid of the realpath check at top
             if os.path.exists(self.app_path + base + '.html'):
