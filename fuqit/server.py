@@ -50,10 +50,12 @@ class FuqitHandler(BaseHTTPRequestHandler):
 
 if __name__ == '__main__':
     app_path = sys.argv[1]
-    app = web.App(app_path)
     host = sys.argv[2]
     port = int(sys.argv[3])
     server_address = (host, port)
+    referer = sys.argv[4]
+
+    app = web.App(app_path, allowed_referer=referer)
 
     httpd = HTTPServer(server_address, FuqitHandler)
     #TODO: uh...how do i give my server stuff to give the handler?

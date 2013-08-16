@@ -56,6 +56,7 @@ You can play with the example by doing this::
 Then go to http://127.0.0.1:8000/ and you'll get my little demo testing app.
 It's in the app directory and just has some files for testing the rendering.
 
+
 But That's Magic!
 =================
 

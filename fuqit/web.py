@@ -17,21 +17,35 @@
 import os
 from jinja2 import Environment, PackageLoader, TemplateNotFound
 from fuqit import tools
+import re
 
 class RequestDict(dict):
     __getattr__ = dict.__getitem__
 
 class App(object):
 
-    def __init__(self, app, default_mtype=None, static_dir=None):
+    def __init__(self, app, default_mtype=None, static_dir=None,
+                 allowed_referer="*"):
         self.app_path = os.path.realpath(app)
         self.app = app
         self.static_dir = os.path.realpath(self.app_path +
                                            (static_dir or '/static/'))
         self.default_mtype = default_mtype or 'text/html'
         self.env = Environment(loader=PackageLoader(self.app, '.'))
+        self.allowed_referer = re.compile(allowed_referer)
+
+    def csrf_check(self, context):
+        referer = context['web']['headers'].get('referer', '')
+
+        if referer:
+            return self.allowed_referer.match(referer)
+        else:
+            return True
 
     def process(self, method, path, params, context):
+        if not self.csrf_check(context):
+            return "", 404, {}
+
         try:
             return self.knife_or_banana(path, context)
         except TemplateNotFound:
