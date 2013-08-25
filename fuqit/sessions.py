@@ -45,7 +45,7 @@ def set_session_id(headers, session_id):
     diff = datetime.datetime.now() + dt
     stamp = diff.strftime(expires_format)
 
-    cookies = {'Set-Cookie': 'FuqitSession=%s; version=1; path=/; expires=%s' % (session_id, stamp),
+    cookies = {'Set-Cookie': 'FuqitSession=%s; version=1; path=/; expires=%s; HttpOnly' % (session_id, stamp),
                 'Cookie': 'FuqitSession=%s; version=1; path=/; expires=%s' % (session_id, stamp)}
 
     headers.update(cookies)
