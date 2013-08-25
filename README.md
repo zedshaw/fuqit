@@ -51,9 +51,9 @@ Sessions
 It has ephemeral sessions based on cookies, which means that they go away when you reboot the
 process.  To use sessions you can either use them raw from fuqit/sessions.py or just do this:
 
-    from fuqit.sessions import with\_session 
+    from fuqit.sessions import with_session 
 
-    @with\_session
+    @with_session
     def GET(variables, session):
         session['count'] = session.get('count', 1) + 1
         return "COUNT: %d" % session['count']
