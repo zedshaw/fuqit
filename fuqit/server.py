@@ -23,10 +23,11 @@ DEFAULT_HEADERS = {
 }
 
 class FuqitHandler(BaseHTTPRequestHandler):
+
     def transform_request(self, request_body=None):
         path, params = tools.parse_request(self.path, request_body)
         context = tools.build_context(params, self)
-        body, code, headers = app.process(self.command, path, params, context)
+        body, code, headers = FuqitHandler.app.process(self.command, path, params, context)
         self.generate_response(body, code, headers)
 
     def do_GET(self):
@@ -48,16 +49,15 @@ class FuqitHandler(BaseHTTPRequestHandler):
 
         self.wfile.write(body)
 
-if __name__ == '__main__':
-    app_path = sys.argv[1]
-    host = sys.argv[2]
-    port = int(sys.argv[3])
-    server_address = (host, port)
-    referer = sys.argv[4]
+def run_server(host='127.0.0.1', port=8000, referer='http://', app='app',
+               debug=True):
 
-    app = web.App(app_path, allowed_referer=referer)
+    server_address = (host, port)
+
+    # the fatal flaw of the dumb python webserver design is it makes
+    # a new handler for every request even though it's totally not necessary
+    FuqitHandler.app = web.App(app, allowed_referer=referer)
 
     httpd = HTTPServer(server_address, FuqitHandler)
-    #TODO: uh...how do i give my server stuff to give the handler?
     httpd.serve_forever()
 
