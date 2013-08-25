@@ -45,6 +45,20 @@ Examples:
 It uses the python mimetypes module to figure out mimetypes by extension. No, I don't
 know how to add new extensions to it.
 
+Sessions
+========
+
+It has ephemeral sessions based on cookies, which means that they go away when you reboot the
+process.  To use sessions you can either use them raw from fuqit/sessions.py or just do this:
+
+  from fuqit.sessions import with\_session 
+
+  @with\_session
+  def GET(variables, session):
+      session['count'] = session.get('count', 1) + 1
+      return "COUNT: %d" % session['count']
+
+
 Using It
 ========
 
@@ -71,7 +85,7 @@ Do you have a load of money and are you looking for the next Meteor to waste it
 on?  Well this project is currently looking for funding and it's already been
 on the top of HackerNews!
 
-![HN Too Easy](https://github.com/zedshaw/fuqit/blob/master/hn_win.png?raw=true)
+![HN Too Easy](https://raw.github.com/zedshaw/fuqit/master/app/static/hn_win.png)
 
 Act fast because pretty soon I'll have a spare Sunday and FuqIt will become
 more secure than both Meteor and Ruby On Rails and then you'll miss out on
