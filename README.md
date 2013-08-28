@@ -30,9 +30,10 @@ care about.
 
 0. If it's in /static/ it's a static file.
 1. If it has an extension it's a template.
-2. If it ends in / it's either /index.html or /index.py
+2. If it ends in / it's either /index.html or a module.
 3. Otherwise it's a module named after the path with / changed to .
 unless there is a directory with the same path, then this will produce a redirect.
+4. Modules are found by trying to import longest to shortest paths.
 
 Examples:
 
@@ -41,6 +42,7 @@ Examples:
 * /the/other/place/index.html -> same thing
 * /mystuff/cool -> a module named app.mystuff.cool
 * /dir/that/exists -> redirect to /dir/that/exists/
+* /mymodule/the/path/after/that -> import mymodule.py give it sub_path=/the/path/after/that
 
 It uses the python mimetypes module to figure out mimetypes by extension. No, I don't
 know how to add new extensions to it.
