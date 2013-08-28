@@ -64,7 +64,7 @@ def run_command(host='127.0.0.1', port=8000, referer='http://', app='app',
     """
     Runs a fuqit server.
 
-    fuqit run -host 127.0.0.1 -port 8000 -referrer http:// -app app -debug True
+    fuqit run -host 127.0.0.1 -port 8000 -referer http:// -app app -debug True
     """
     from fuqit import server
 
@@ -74,4 +74,31 @@ def run_command(host='127.0.0.1', port=8000, referer='http://', app='app',
                             referer=referer,
                             app=app,
                             debug=debug)
+
+
+def start_command(host='127.0.0.1', port=8000, referer='http://', app='app',
+                   debug=True):
+    """
+    Runs the fuqit server as a daemon.
+
+    fuqit start -host 127.0.0.1 -port 8000 -referer http:// -app app -debug True
+    """
+
+   
+def stop_command():
+    """
+    Stops a running fuqit daemon.
+
+    fuqit stop
+    """
+
+
+def status_command():
+    """
+    Tells you if a running fuqit service is running or not.
+
+    fuqit status
+    """
+
+
 

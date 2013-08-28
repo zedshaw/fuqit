@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import sys
+from lust import log, server
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from fuqit import web, tools
 
@@ -49,6 +49,7 @@ class FuqitHandler(BaseHTTPRequestHandler):
 
         self.wfile.write(body)
 
+
 def run_server(host='127.0.0.1', port=8000, referer='http://', app='app',
                debug=True):
 
@@ -60,4 +61,22 @@ def run_server(host='127.0.0.1', port=8000, referer='http://', app='app',
 
     httpd = HTTPServer(server_address, FuqitHandler)
     httpd.serve_forever()
+
+
+
+class Service(server.Simple):
+    name = 'fuqit'
+    should_jail = False
+
+    def before_drop_privs(self, args):
+        pass
+
+    def start(self, args):
+        pass
+
+
+def run(args, config_file, config_name):
+    service = Service(config_file=config_file)
+    log.setup(service.get('log_file'))
+    service.run(args)
 
