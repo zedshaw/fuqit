@@ -79,7 +79,7 @@ class App(object):
             modname = base.replace('/', '.')
 
             try:
-                return base, tools.module(modname)
+                return base, tools.module(modname, self.app)
             except ImportError:
                 # split off the next chunk to try to load
                 base, tail = os.path.split(base)

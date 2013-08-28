@@ -22,8 +22,8 @@ __all__ = ['module']
 
 mimetypes.init()
 
-def module(name):
-    themodule = import_module("." + name, package="app")
+def module(name, app_name):
+    themodule = import_module("." + name, package=app_name)
     return themodule
 
 def build_context(params, handler):
