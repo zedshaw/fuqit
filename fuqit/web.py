@@ -68,27 +68,47 @@ class App(object):
         template = self.env.get_template(path)
         return template.render(**variables), 200, headers
 
+    def find_longest_module(self, name, variables):
+        base = name[1:]
+
+        # need to limit the max we'll try to 20 for safety
+        for i in xrange(0, 20):
+            # go until we hit the /
+            if base == '/': return None
+
+            modname = base.replace('/', '.')
+
+            try:
+                return base, tools.module(modname)
+            except ImportError:
+                # split off the next chunk to try to load
+                base, tail = os.path.split(base)
+
+        # exhausted the path limit
+        return None
+
     def render_module(self, name, variables):
-        base, ext = os.path.splitext(name[1:])
+        base, target = self.find_longest_module(name, variables)
+        variables['web']['base_path'] = base
+        variables['web']['sub_path'] = name[len(base)+1:]
+
         context = RequestDict(variables['web'])
-        base = base.replace('/', '.')
-        try:
-            target = tools.module(base)
-        except ImportError:
-            return self.render_error(404, "Not Found", variables=variables)
 
-        try:
-            actions = target.__dict__
-            func = actions.get(context.method, None) or actions['run']
-        except KeyError:
-            return self.render_error(500, 'No run method or %s method.' %
-                                     context.method)
-        result = func(context)
+        if target:
+            try:
+                actions = target.__dict__
+                func = actions.get(context.method, None) or actions['run']
+            except KeyError:
+                return self.render_error(500, 'No run method or %s method.' %
+                                         context.method)
+            result = func(context)
 
-        if isinstance(result, tuple):
-            return result
+            if isinstance(result, tuple):
+                return result
+            else:
+                return result, 200, {'Content-Type': self.default_mtype}
         else:
-            return result, 200, {'Content-Type': self.default_mtype}
+            return self.render_error(404, "Not Found", variables=variables)
 
     def render_static(self, ext, path):
         # stupid inefficient, but that's what you get
@@ -117,15 +137,15 @@ class App(object):
             #! this will be hackable if you get rid of the realpath check at top
             if os.path.exists(self.app_path + base + '.html'):
                 return self.render_template('.html', base + '.html', variables)
-            elif os.path.exists(self.app + base + '.py'):
-                return self.render_module(base + '.py', variables)
+            else:
+                return self.render_module(path, variables)
 
         elif os.path.isdir(realpath):
             return "", 301, {'Location': path + '/'}
 
         else:
             # otherwise it's a module, tack on .py and load or fail
-            return self.render_module(path + '.py', variables)
+            return self.render_module(path, variables)
 
 
 

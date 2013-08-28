@@ -8,10 +8,12 @@ def GET(variables, session):
     """
     session['count'] = session.get('count', 1) + 1
 
-    response = "COUNT: %d" % session['count']
+    # need to do this since headers aren't really a dict
+    heads = {}
+    for key, values in variables.headers.items():
+        heads[key] = values
 
-    for k,v in variables.headers.items():
-        response += "\n%r: %r" % (k,v)
+    variables['headers'] = heads
 
-    return "HEADERS: %s" % response, 200, {}
+    return "VARIABLES: %r\n\nSESSION: %r" % (variables, session), 200, {}
 
