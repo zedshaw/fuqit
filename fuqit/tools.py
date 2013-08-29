@@ -18,12 +18,14 @@ from importlib import import_module
 import mimetypes
 import cgi
 
-__all__ = ['module']
-
 mimetypes.init()
 
-def module(name, app_name):
-    themodule = import_module("." + name, package=app_name)
+def module(name, app_name=None):
+    if app_name:
+        themodule = import_module("." + name, package=app_name)
+    else:
+        themodule = import_module(name)
+
     return themodule
 
 def build_context(params, handler, app):
