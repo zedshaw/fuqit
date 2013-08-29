@@ -74,8 +74,8 @@ def run_command(host='127.0.0.1', port=8000, referer='http://', app='app',
     """
     from fuqit import server
 
+    sys.path.append(os.path.realpath(chroot))
     os.chdir(chroot)
-    sys.path.append(chroot)
     
     server.run_server(host=host,
                             port=port,
