@@ -138,7 +138,7 @@ class App(object):
             if os.path.exists(self.app_path + base + '.html'):
                 return self.render_template('.html', base + '.html', variables)
             else:
-                return self.render_module(path, variables)
+                return self.render_module(path[:-1], variables)
 
         elif os.path.isdir(realpath):
             return "", 301, {'Location': path + '/'}
