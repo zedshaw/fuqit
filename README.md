@@ -111,6 +111,16 @@ Here's how you do it:
 
 If you actually host it you should have your fronting web server serve them straight out of there.
 
+Databasing
+==========
+
+FuqIt took the public domain web.py database module and uses that.  The best docs for it is currently from
+the Web.py folks over at <http://webpy.org/docs/0.3/tutorial#databasing>.
+
+Keep in mind that it's not too usable right now as you can really only get at the database by using the
+raw API and doing it in modules.  Later versions will make that easier.
+
+
 But That's Magic!
 =================
 
