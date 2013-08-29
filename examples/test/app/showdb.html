@@ -7,7 +7,10 @@
         <tr><th>id</th><th>Title</th></tr>
 
         {% for record in web.db.select('test') %}
-        <tr><td>{{ record.id }}</td><td>{{ record.title }}</td></tr>
+        <tr>
+            <td>{{ record.id }}</td>
+            <td>{{ record.title }}</td>
+            <td><a href="/dbtest/delete?id={{ record.id }}">[X]</a></tr>
         {% endfor %}
         </table>
 
