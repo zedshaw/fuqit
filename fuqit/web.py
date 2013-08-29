@@ -16,7 +16,7 @@
 
 import os
 from jinja2 import Environment, PackageLoader, TemplateNotFound
-from fuqit import tools
+from fuqit import tools, sessions
 import re
 import traceback
 
@@ -38,13 +38,13 @@ class App(object):
 
     def render_error(self, code, message="", variables=None):
         try:
-            return self.render_template('.html', self.errors_dir + '%d.html' %
-                                        code, variables or {})
+            return self.render_template(self.errors_dir + '%d.html' %
+                                        code, variables or {}, ext='.html')
         except TemplateNotFound:
             return message, code, {}
 
     def csrf_check(self, context):
-        referer = context['web']['headers'].get('referer', '')
+        referer = context['headers'].get('referer', '')
 
         if referer:
             return self.allowed_referer.match(referer)
@@ -56,17 +56,32 @@ class App(object):
             return self.render_error(404, "Not Found")
 
         try:
-            return self.knife_or_banana(path, context)
+            return self.render(path, context)
         except TemplateNotFound:
             return self.render_error(404, "Not Found")
         except Exception as e:
             traceback.print_exc()
             return self.render_error(500, str(e))
 
-    def render_template(self, ext, path, variables):
+    def render_template(self, path, variables, ext=None):
+        ext = ext or os.path.splitext(path)[1]
         headers = tools.make_ctype(ext, self.default_mtype)
+
+        if 'headers' in variables:
+            sessions.load_session(variables)
+
+        context = {'web': variables,
+                   'module': tools.module,
+                   'response_headers': headers
+                  }
+
         template = self.env.get_template(path)
-        return template.render(**variables), 200, headers
+        result = template.render(**context)
+
+        if 'headers' in variables:
+            sessions.save_session(variables, headers)
+
+        return result, 200, headers
 
     def find_longest_module(self, name, variables):
         base = name[1:]
@@ -89,10 +104,11 @@ class App(object):
 
     def render_module(self, name, variables):
         base, target = self.find_longest_module(name, variables)
-        variables['web']['base_path'] = base
-        variables['web']['sub_path'] = name[len(base)+1:]
+        variables['base_path'] = base
+        variables['sub_path'] = name[len(base)+1:]
+        sessions.load_session(variables)
 
-        context = RequestDict(variables['web'])
+        context = RequestDict(variables)
 
         if target:
             try:
@@ -103,10 +119,16 @@ class App(object):
                                          context.method)
             result = func(context)
 
+            session_headers = {}
+            sessions.save_session(variables, session_headers)
+
             if isinstance(result, tuple):
-                return result
+                body, code, headers = result
+                headers.update(session_headers)
+                return body, code, headers
             else:
-                return result, 200, {'Content-Type': self.default_mtype}
+                session_headers['Content-type'] = self.default_mtype
+                return result, 200, session_headers
         else:
             return self.render_error(404, "Not Found", variables=variables)
 
@@ -115,7 +137,7 @@ class App(object):
         headers = tools.make_ctype(ext, self.default_mtype)
         return open(path).read(), 200, headers
 
-    def knife_or_banana(self, path, variables):
+    def render(self, path, variables):
         root, ext = os.path.splitext(path)
         realpath = os.path.realpath(self.app_path + path)
 
@@ -128,7 +150,7 @@ class App(object):
 
         elif ext:
             # if it has an extension it's a template
-            return self.render_template(ext, path, variables)
+            return self.render_template(path, variables, ext=ext)
 
         elif path.endswith('/'):
             # if it ends in /, it's a /index.html or /index.py
@@ -136,7 +158,7 @@ class App(object):
 
             #! this will be hackable if you get rid of the realpath check at top
             if os.path.exists(self.app_path + base + '.html'):
-                return self.render_template('.html', base + '.html', variables)
+                return self.render_template(base + '.html', variables, ext='.html')
             else:
                 return self.render_module(path[:-1], variables)
 
@@ -146,6 +168,5 @@ class App(object):
         else:
             # otherwise it's a module, tack on .py and load or fail
             return self.render_module(path, variables)
-
 
 

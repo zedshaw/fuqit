@@ -1,19 +1,11 @@
-from fuqit.sessions import with_session
 
-@with_session
-def GET(variables, session):
+def GET(web):
     """
-    You can either return a full tuple of (body, status, headers),
-    or just a string and it's assumed you want 200 and default headers.
+    Demonstrates using the session and also how to then render another
+    thing seamlessly.  Just call web.app.render() and it'll do all the
+    resolving gear again, so one method works on statics, modules, jinja2
+    just like you accessed it from a browser.
     """
-    session['count'] = session.get('count', 1) + 1
+    web.session['count'] = web.session.get('count', 1) + 1
 
-    # need to do this since headers aren't really a dict
-    heads = {}
-    for key, values in variables.headers.items():
-        heads[key] = values
-
-    variables['headers'] = heads
-
-    return "VARIABLES: %r\n\nSESSION: %r" % (variables, session), 200, {}
-
+    return web.app.render('renderme.html', web)

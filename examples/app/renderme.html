@@ -1,0 +1,13 @@
+<html>
+<body>
+
+{% for key, value in web.headers.items() %}
+    <p>{{ key }}: {{ value }}</p> 
+{% endfor %}
+
+{% for key, value in web.session.items() %}
+    <p>{{ key }}: {{ value }}</p> 
+{% endfor %}
+
+</body>
+</html>

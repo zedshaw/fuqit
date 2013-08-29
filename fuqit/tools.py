@@ -26,18 +26,15 @@ def module(name, app_name):
     themodule = import_module("." + name, package=app_name)
     return themodule
 
-def build_context(params, handler):
-    variables = {'web': 
-                 {'params': params,
-                  'headers': handler.headers,
-                  'path': handler.path,
-                  'method': handler.command,
-                  'client_address': handler.client_address,
-                  'request_version': handler.request_version,
-                 },
-                 'module': module,
-                }
-    return variables
+def build_context(params, handler, app):
+    return {'params': params,
+              'headers': handler.headers,
+              'path': handler.path,
+              'method': handler.command,
+              'client_address': handler.client_address,
+              'request_version': handler.request_version,
+              'app': app,
+            }
 
 def parse_request(path, request_body):
     request_params = {}

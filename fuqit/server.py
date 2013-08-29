@@ -26,7 +26,7 @@ class FuqitHandler(BaseHTTPRequestHandler):
 
     def transform_request(self, request_body=None):
         path, params = tools.parse_request(self.path, request_body)
-        context = tools.build_context(params, self)
+        context = tools.build_context(params, self, FuqitHandler.app)
         body, code, headers = FuqitHandler.app.process(self.command, path, params, context)
         self.generate_response(body, code, headers)
 

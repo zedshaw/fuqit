@@ -49,5 +49,12 @@
             <tr><td>request_version</td><td>{{ web.request_version }}</td></tr>
             <tr><td>headers</td><td>{{ web.headers }}</td></tr>
         </table>
+
+        <h1>Session</h1>
+        <table>
+            {% for key, value in web.session.items() %}
+            <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+            {% endfor %}
+        </table>
     </body>
 </html>

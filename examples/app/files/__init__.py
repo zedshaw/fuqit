@@ -1,11 +1,10 @@
 
 
-def run(variables):
+def run(web):
     """
-    See app/test.py for the way you return full results. Otherwise you
-    can just return a string.
+    You can return a string or a tuple of body, code, headers
     """
-    return "I Am KING!"
+    return "I Am KING!", 200, {'Content-type': 'text/plain'}
 
 
 

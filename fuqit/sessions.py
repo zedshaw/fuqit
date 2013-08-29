@@ -50,30 +50,14 @@ def set_session_id(headers, session_id):
 
     headers.update(cookies)
 
-def load_session(headers):
-    session_id = get_session_id(headers)
-    return session_id, SESSION_STORE.get(session_id, {})
+def load_session(variables):
+    session_id = get_session_id(variables['headers'])
+    session = SESSION_STORE.get(session_id, {})
+    variables['session'] = session
+    variables['session_id'] = session_id
 
-def save_session(session_id, session, headers):
-    set_session_id(headers, session_id)
-    SESSION_STORE[session_id] = session
-
-
-def with_session(handler):
-
-    def sessioned_handler(variables):
-        session_id, session = load_session(variables.headers)
-        results = handler(variables, session)
-
-        if isinstance(results, tuple):
-            resp, code, headers = results
-            save_session(session_id, session, headers)
-            return resp, code, headers
-        else:
-            headers = {}
-            save_session(session_id, session, headers)
-            return results, 200, headers
-
-    return sessioned_handler
-
+def save_session(variables, response_headers):
+    session_id = variables['session_id']
+    set_session_id(response_headers, session_id)
+    SESSION_STORE[session_id] = variables['session']
 
