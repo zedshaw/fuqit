@@ -11,15 +11,11 @@ goes on.
 How It Works
 ============
 
-1. mkdir app
-2. touch app/__init__.py
-4. mkdir app/static
-4. python fuqit.py app 0.0.0.0 8080
-5. Put .py files or "anything else" into app.
-6. The .py files need a run function.  It gets variables.
-7. Anything else is a jinja2 template.
+1. fuqit init -into test
+2. ./bin/fuqit run -chroot test
+3. Browser http://localhost:8000/
 
-That's it.  Look in this project's app/ directory to see me
+That's it.  Look in this project's test/app/ directory to see me
 doing stupid crap with it to see if it works.
 
 Resolution Order
@@ -66,7 +62,7 @@ Using It
 
 You can play with the example by doing this::
 
-    ./bin/fuqit run -chroot examples -app app
+    ./bin/fuqit run -chroot examples/test -app app
 
 Then go to http://127.0.0.1:8000/ and you'll get my little demo testing app.
 It's in the app directory and just has some files for testing the rendering.

@@ -43,17 +43,26 @@ def help_command(**options):
         print "\nUse fuqit help -for <command> to find out more."
 
 
-def init_command(into='app'):
+def init_command(into=None):
     """
     Initializes a fuqit app, default directory is 'app'.
 
-    fuqit init -into app
+    fuqit init -into myapp
     """
 
     if not os.path.exists(into):
-        os.mkdir(into)
-        with open(into + '/index.html', 'w') as index:
-            index.write('Put your crap here and hit rephresh.')
+
+        for newdir in ['/', '/app', '/app/static']:
+            os.mkdir(into + newdir)
+
+        open(into + '/app/__init__.py', 'w').close()
+        with open(into + '/config.py', 'w') as config:
+            config.write("from fuqit import data\n\ndb = data.database(dbn='sqlite', db='data.sqlite3')")
+
+        with open(into + '/app/index.html', 'w') as index:
+            index.write('Put your crap in %s/app and hit rephresh.' % into)
+
+        print "Your app is ready for hackings in %s" % into
 
     else:
         print "The app directory already exists. Try:\n\nfuqit init -into [SOMEDIR]"
