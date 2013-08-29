@@ -60,14 +60,22 @@ def init_command(into='app'):
 
 
 def run_command(host='127.0.0.1', port=8000, referer='http://', app='app',
-                debug=True):
+                debug=True, chroot="."):
     """
     Runs a fuqit server.
 
-    fuqit run -host 127.0.0.1 -port 8000 -referer http:// -app app -debug True
+    fuqit run -host 127.0.0.1 -port 8000 -referer http:// -app app -debug True \
+            -chroot .
+
+    NOTE: In run mode it's meant for developers, so -chroot just does a cd
+    to the directory.  In server mode it actually chroots there.  It also
+    adds the chroot path to the python syspath.
+
     """
     from fuqit import server
 
+    os.chdir(chroot)
+    sys.path.append(chroot)
     
     server.run_server(host=host,
                             port=port,
@@ -77,7 +85,7 @@ def run_command(host='127.0.0.1', port=8000, referer='http://', app='app',
 
 
 def start_command(host='127.0.0.1', port=8000, referer='http://', app='app',
-                   debug=True):
+                   debug=True, chroot="."):
     """
     Runs the fuqit server as a daemon.
 
