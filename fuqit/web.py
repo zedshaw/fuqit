@@ -35,6 +35,8 @@ class App(object):
         self.default_mtype = default_mtype or 'text/html'
         self.env = Environment(loader=PackageLoader(self.app, '.'))
         self.allowed_referer = re.compile(allowed_referer)
+        self.config = tools.module('config')
+        self.db = self.config.db
 
     def render_error(self, code, message="", variables=None):
         try:
@@ -168,5 +170,9 @@ class App(object):
         else:
             # otherwise it's a module, tack on .py and load or fail
             return self.render_module(path, variables)
+
+
+    def redirect(self, path):
+        return "", 301, {'Location': path}
 
 

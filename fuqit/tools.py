@@ -36,6 +36,7 @@ def build_context(params, handler, app):
               'client_address': handler.client_address,
               'request_version': handler.request_version,
               'app': app,
+              'db': app.db,
             }
 
 def parse_request(path, request_body):
