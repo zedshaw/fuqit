@@ -76,6 +76,41 @@ You can get help for run with:
     ./bin/fuqit help -for run
 
 
+Writing A .html Handler
+=======================
+
+Here's how you do it:
+
+1. Make a .html file in the app directory.
+2. Put jinja2 syntax stuff in it.
+3. You get a web variable to play with that has all the gear, including sessions, headers, response\_headers, and a module function for easily loading code.
+4. Hit it with a browser.  That's it.
+
+
+Writing A Module Handler
+========================
+
+Here's how you do it:
+
+1. Make a .py file with the name you want.
+2. Put either a run, GET, or POST method in it.  run handles every possible request, GET or POST handles just those.
+3. Your method will get one parameter, web, which has .session, .headers, .app, and everything.
+4. Return a string for the body; a body, code, headers tuple; or just call web.app.render("somefuqitpath.html", web)
+
+Remember that if you have say /myapp.py and you get a URL of /myapp/stuff/things, then this module will run and it'll get
+a web.sub\_path == '/stuff/things'.
+
+Static Files
+============
+
+Here's how you do it:
+
+1. mkdir app/static
+2. Put the static crap in there.
+3. Any URL with /static/ in front serves out of there.
+
+If you actually host it you should have your fronting web server serve them straight out of there.
+
 But That's Magic!
 =================
 
