@@ -126,7 +126,7 @@ But That's Magic!
 
 I will refer you to our official Mascot:
 
-![Magic Is Awesome](https://raw.github.com/zedshaw/fuqit/master/app/static/mascot.gif)
+![Magic Is Awesome](https://raw.github.com/zedshaw/fuqit/master/examples/app/static/mascot.gif)
 
 Investor Statement
 ==================
@@ -135,7 +135,7 @@ Do you have a load of money and are you looking for the next Meteor to waste it
 on?  Well this project is currently looking for funding and it's already been
 on the top of HackerNews!
 
-![HN Too Easy](https://raw.github.com/zedshaw/fuqit/master/app/static/hn_win.png)
+![HN Too Easy](https://raw.github.com/zedshaw/fuqit/master/examples/app/static/hn_win.png)
 
 Act fast because pretty soon I'll have a spare Sunday and FuqIt will become
 more secure than both Meteor and Ruby On Rails and then you'll miss out on
