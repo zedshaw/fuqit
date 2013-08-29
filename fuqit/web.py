@@ -91,7 +91,8 @@ class App(object):
         # need to limit the max we'll try to 20 for safety
         for i in xrange(0, 20):
             # go until we hit the /
-            if base == '/': return None
+            if base == '/' or base == '':
+                return None, None
 
             modname = base.replace('/', '.')
 
@@ -102,10 +103,14 @@ class App(object):
                 base, tail = os.path.split(base)
 
         # exhausted the path limit
-        return None
+        return None, None
 
     def render_module(self, name, variables):
         base, target = self.find_longest_module(name, variables)
+
+        if not (base and target):
+            return self.render_error(404, "Not Found", variables=variables)
+            
         variables['base_path'] = base
         variables['sub_path'] = name[len(base)+1:]
         sessions.load_session(variables)
