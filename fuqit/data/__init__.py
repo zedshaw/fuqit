@@ -649,11 +649,14 @@ class DB:
             self.ctx.commit()
         return out
 
-    def get(self, tables, vars=None, what='*', where=None, order=None, group=None, 
-               offset=None, _test=False):
-        results = self.select(tables, vars=vars, what=what, 
-                            where=where, order=order, group=group,
-                            limit=1, offset=offset, _test=_test)
+    def get(self, tables, by_id=None, vars=None, what='*', where=None,  _test=False):
+        if by_id:
+            assert not (vars and where), "If by_id you can't give vars and where."
+            results = self.select(tables, vars={'id': by_id}, what=what,
+                                  where='id = $id', limit=1, _test=_test)
+        else:
+            results = self.select(tables, vars=vars, what=what, where=where, limit=1, _test=_test)
+
         if not results:
             return None
         else:

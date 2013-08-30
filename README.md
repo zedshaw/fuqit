@@ -112,9 +112,22 @@ Databasing
 FuqIt took the public domain web.py database module and uses that.  The best docs for it is currently from
 the Web.py folks over at <http://webpy.org/docs/0.3/tutorial#databasing>.
 
-Keep in mind that it's not too usable right now as you can really only get at the database by using the
-raw API and doing it in modules.  Later versions will make that easier.
+You use a database by doing two things:
 
+1. Edit the config.py file that fuqit makes for you.  Inside there is an initial configuration that makes a db variable configured from the fuqit.data.database call.
+2. Change the data.database call to use the database you want.  It's currently setup to use a SQLite3 database.
+
+That's it.  Once you have that configure, the web variable in templates and modules will have a web.db variable for you to do database stuff with.
+
+Web.py Database Modifications
+-----------------------------
+
+There are a few minor modifications to the default web.py that you need to know:
+
+1. It's renamed data so that it can be more than just for databases and so it doesn't conflict with the db variable in config.py.
+2. I added a web.db.get() function that's a reduced version of web.db.select() that is used to just get one record.
+
+As I evolve web.py's DB I'll just call it the fuqit.data API and document it differently.
 
 But That's Magic!
 =================
