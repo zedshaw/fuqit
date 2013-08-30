@@ -21,8 +21,7 @@ doing stupid crap with it to see if it works.
 Resolution Order
 ================
 
-Easy, and oh so hackable so don't run this crap on any computer you
-care about.
+Easy, and designed to treat raw .html Jinja2 templates the same as a .py file module:
 
 0. If it's in /static/ it's a static file.
 1. If it has an extension it's a template.
