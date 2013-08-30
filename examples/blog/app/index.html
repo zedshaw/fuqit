@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+
+{% block title %}Fuqit Blog Home{% endblock %}
+
+{% block content %}
+<h1>Fuqit Blog Platform</h1>
+
+<table>
+    <tr><th>Title</th><th>Author</th><th>Posted</th></tr>
+
+    {% for post in web.db.select('post') %}
+    <tr><td><a href="/read/{{ post.id }}">{{ post.title }}</a><td><td>{{ post.created_on }}</td></tr>
+    {% endfor %}
+
+</table>
+
+<p><a href="/write">Write a new post</a></p>
+{% endblock %}

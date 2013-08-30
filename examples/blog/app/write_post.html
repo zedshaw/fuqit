@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}Fuqit Write A Post{% endblock %}
+
+{% block content %}
+
+<h1>Write A Blog Post</h1>
+
+<form action="/write" method="POST">
+
+    <input name="title">
+    <hr>
+
+    <textarea name="content" cols="80" rows="10"></textarea>
+    
+    <br>
+    <input type="submit" value="Post It">
+
+</form>
+
+{% endblock %}
+

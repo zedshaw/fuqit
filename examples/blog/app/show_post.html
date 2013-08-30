@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}Fuqit Blog - {{ web.post.title }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ web.post.title }}</h1>
+
+<pre>
+{{ web.post.content }}
+</pre>
+
+<p><a href="/">Back To Posts</a></p>
+
+{% endblock %}
+
