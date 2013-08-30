@@ -648,6 +648,16 @@ class DB:
         if not self.ctx.transactions: 
             self.ctx.commit()
         return out
+
+    def get(self, tables, vars=None, what='*', where=None, order=None, group=None, 
+               offset=None, _test=False):
+        results = self.select(tables, vars=vars, what=what, 
+                            where=where, order=order, group=group,
+                            limit=1, offset=offset, _test=_test)
+        if not results:
+            return None
+        else:
+            return list(results)[0]
     
     def select(self, tables, vars=None, what='*', where=None, order=None, group=None, 
                limit=None, offset=None, _test=False): 
