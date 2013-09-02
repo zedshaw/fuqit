@@ -1,12 +1,19 @@
 <html>
 <body>
 
+    <h1>Headers</h1>
 {% for key, value in web.headers.items() %}
     <p>{{ key }}: {{ value }}</p> 
 {% endfor %}
 
+    <h1>Session</h1>
 {% for key, value in web.session.items() %}
     <p>{{ key }}: {{ value }}</p> 
+{% endfor %}
+
+    <h1>Form</h1>
+{% for key, value in web.form.items() %}
+    <p>{{key}}: {{ value }}</p>
 {% endfor %}
 
 </body>

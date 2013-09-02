@@ -124,6 +124,7 @@ class App(object):
             except KeyError:
                 return self.render_error(500, 'No run method or %s method.' %
                                          context.method)
+
             result = func(context)
 
             session_headers = {}

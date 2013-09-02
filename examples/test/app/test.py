@@ -1,3 +1,5 @@
+from fuqit import forms
+
 
 def GET(web):
     """
@@ -6,6 +8,11 @@ def GET(web):
     resolving gear again, so one method works on statics, modules, jinja2
     just like you accessed it from a browser.
     """
-    web.session['count'] = web.session.get('count', 1) + 1
+    web.form = forms.read(web.params, reset=False)
+
+    if web.form.reset:
+        web.session['count'] = 1
+    else:
+        web.session['count'] = web.session.get('count', 1) + 1
 
     return web.app.render('renderme.html', web)
