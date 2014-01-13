@@ -68,7 +68,7 @@ def init_command(into=None):
         print "The app directory already exists. Try:\n\nfuqit init -into [SOMEDIR]"
 
 
-def run_command(host='127.0.0.1', port=8000, referer='http://', app='app',
+def run_command(host='127.0.0.1', port=8000, config_module='config', app='app',
                 debug=True, chroot="."):
     """
     Runs a fuqit server.
@@ -88,7 +88,7 @@ def run_command(host='127.0.0.1', port=8000, referer='http://', app='app',
     
     server.run_server(host=host,
                             port=port,
-                            referer=referer,
+                            config_module=config_module,
                             app=app,
                             debug=debug)
 

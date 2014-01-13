@@ -1,3 +1,5 @@
+from fuqit.web import render, redirect
+from config import db
 
 def GET(web):
     """
@@ -6,11 +8,11 @@ def GET(web):
     to go to a handler first.
     """
     if web.sub_path == '/delete':
-        web.db.delete('test', where='id = $id', vars=web.params)
+        db.delete('test', where='id = $id', vars=web.params)
 
-    return web.app.render("showdb.html", web)
+    return render("showdb.html", web)
 
 def POST(web):
-    web.db.insert('test', title=web.params['title'])
-    return web.app.redirect("/dbtest")
+    db.insert('test', title=web.params['title'])
+    return redirect("/dbtest")
 

@@ -14,29 +14,30 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from importlib import import_module
+import importlib
 import mimetypes
 import cgi
+import os
 
 mimetypes.init()
 
 def module(name, app_name=None):
     if app_name:
-        themodule = import_module("." + name, package=app_name)
+        themodule = importlib.import_module("." + name, package=app_name)
     else:
-        themodule = import_module(name)
+        themodule = importlib.import_module(name)
 
+    reload(themodule)
     return themodule
 
-def build_context(params, handler, app):
+
+def build_context(params, handler):
     return {'params': params,
               'headers': handler.headers,
               'path': handler.path,
               'method': handler.command,
               'client_address': handler.client_address,
               'request_version': handler.request_version,
-              'app': app,
-              'db': app.db,
             }
 
 def parse_request(path, request_body):
@@ -59,5 +60,26 @@ def make_ctype(ext, default_mtype):
     return {'Content-Type': mtype}
 
 
+
+def find_longest_module(app, name, variables):
+    base = name[1:]
+
+    # need to limit the max we'll try to 20 for safety
+    for i in xrange(0, 20):
+        # go until we hit the /
+        if base == '/' or base == '':
+            return None, None
+
+        modname = base.replace('/', '.')
+
+        try:
+            return base, module(modname, app)
+        except ImportError, e:
+            # split off the next chunk to try to load
+            print "ERROR", e 
+            base, tail = os.path.split(base)
+
+    # exhausted the path limit
+    return None, None
 
 

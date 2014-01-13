@@ -6,7 +6,7 @@
         <table>
         <tr><th>id</th><th>Title</th></tr>
 
-        {% for record in web.db.select('test') %}
+        {% for record in db.select('test') %}
         <tr>
             <td>{{ record.id }}</td>
             <td>{{ record.title }}</td>

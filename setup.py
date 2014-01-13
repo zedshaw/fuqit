@@ -14,7 +14,7 @@ config = {
      'version': '1.0',
      'scripts': ['bin/fuqit'],
      'install_requires': ['python-modargs', 'python-lust'],
-     'packages': ['fuqit', 'fuqit.db'],
+     'packages': ['fuqit', 'fuqit.data'],
      'name': 'fuqit'
 }
 

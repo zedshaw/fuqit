@@ -1,10 +1,15 @@
+from fuqit.web import render, error
+from config import db
 
 def run(web):
-    post_id = int(web.sub_path[1:])
+    post_id = web.sub_path[1:]
 
-    web.post = web.db.get('post', by_id=post_id)
+    if not post_id: return error(404, "Not Found")
 
-    if not web.post:
-        return web.app.render_error(404, "Not Found")
+    web.post = db.get('post', by_id=post_id)
+
+    if web.post:
+        return render('show_post.html', web)
     else:
-        return web.app.render('show_post.html', web)
+        return error(404, "Not Found")
+

@@ -9,7 +9,7 @@
 <table>
     <tr><th>Title</th><th>Author</th><th>Posted</th></tr>
 
-    {% for post in web.db.select('post') %}
+    {% for post in db.select('post') %}
     <tr><td><a href="/read/{{ post.id }}">{{ post.title }}</a><td><td>{{ post.created_on }}</td></tr>
     {% endfor %}
 

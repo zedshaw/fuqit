@@ -1,11 +1,14 @@
+from fuqit.web import render, redirect
+from config import db
+
 
 def GET(web):
-    return web.app.render("write_post.html", web)
+    return render("write_post.html", web)
 
 def POST(web):
-    web.db.insert('post',
+    db.insert('post',
               title=web.params['title'],
               content=web.params['content'])
 
 
-    return web.app.redirect("/")
+    return redirect("/")

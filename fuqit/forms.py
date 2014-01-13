@@ -1,7 +1,7 @@
 from fuqit.web import RequestDict
 
-def read(params, **expected):
-    results = params.copy()
+def read(web, **expected):
+    results = web.params.copy()
 
     for key, value in expected.items():
         if key in results:

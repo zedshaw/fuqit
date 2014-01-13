@@ -26,8 +26,8 @@ class FuqitHandler(BaseHTTPRequestHandler):
 
     def transform_request(self, request_body=None):
         path, params = tools.parse_request(self.path, request_body)
-        context = tools.build_context(params, self, FuqitHandler.app)
-        body, code, headers = FuqitHandler.app.process(self.command, path, params, context)
+        context = tools.build_context(params, self)
+        body, code, headers = web.process(self.command, path, params, context)
         self.generate_response(body, code, headers)
 
     def do_GET(self):
@@ -50,15 +50,11 @@ class FuqitHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
 
-def run_server(host='127.0.0.1', port=8000, referer='http://', app='app',
+def run_server(host='127.0.0.1', port=8000, config_module='config', app='app',
                debug=True):
 
     server_address = (host, port)
-
-    # the fatal flaw of the dumb python webserver design is it makes
-    # a new handler for every request even though it's totally not necessary
-    FuqitHandler.app = web.App(app, allowed_referer=referer)
-
+    web.configure(app_module=app, config_module=config_module) 
     httpd = HTTPServer(server_address, FuqitHandler)
     httpd.serve_forever()
 
